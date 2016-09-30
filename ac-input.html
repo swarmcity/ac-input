@@ -37,7 +37,7 @@ Example:
      :host {
         display: block;
         margin: 8px 0px 8px 0px;
-        --input-color: darkgrey;
+        --input-color: green;
         width: 100%;
         max-width: 100%;
         --txt-align:left;
@@ -48,23 +48,24 @@ Example:
         position: relative;
         box-sizing: border-box;
         @apply(--layout-vertical);
-        @apply(--montserrat-reg);
+        @apply(--montserrat-light);
         z-index: 0;
       }
 
       .label {
-        font-size: 12px;
+        font-size: 10px;
         z-index: -1;
         box-sizing: border-box;
-        padding: 5px 5px 0px 0px;
-        color:var(--ac-grey4);
+        /*padding: 5px 5px 0px 0px;*/
+        padding: 0px;
+        color:var(--input-color);
         text-align: var(--txt-align);
 
       }
 
       input {
         @apply(--montserrat-reg);
-        color:var(--ac-darkgrey);
+        color: var(--input-color);
         outline-width: 0;
         outline: none;
         -moz-user-select: none;
@@ -77,7 +78,7 @@ Example:
         padding: 4px 8px 4px 0px;
         font-size: 16px;
         background-color: transparent;
-        border-bottom: 1px solid rgba(0,0,0,0.3);
+        border-bottom: 1px solid var(--input-color);
         text-align: var(--txt-align);
       
         -webkit-user-select: text;
@@ -90,7 +91,7 @@ Example:
       }
 
       .nocontent label {
-        color: rgba(0,0,0,0.4);
+        color: var(--input-color);
         -webkit-transition: -webkit-transform 0.25s;
         transition: transform 0.25s;
         -webkit-transform-origin: var(--transform-origin);
@@ -112,7 +113,7 @@ Example:
       }
 
       .infocus input {
-        border-bottom: 2px solid var(--ac-darkgrey);
+        border-bottom: 2px solid var(--input-color);
 
       }
 
