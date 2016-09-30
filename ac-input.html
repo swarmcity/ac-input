@@ -9,7 +9,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../ac-style/ac-style.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="stylesheet" href="ac-input-datepicker.css">
 <!--
 An element providing a solution to no problem in particular.
 
@@ -28,124 +31,272 @@ Example:
 -->
 
 <dom-module id="ac-input">
+  
   <template>
     <style>
-      :host {
+     :host {
         display: block;
-        box-sizing: border-box;
+        margin: 8px 0px 8px 0px;
+        --input-color: darkgrey;
+        width: 100%;
+        max-width: 100%;
+        --txt-align:left;
+        --transform-origin:left top;
       }
 
-      .author img {
-        display: block;
-        float: left;
-        margin-right: 5px;
-        max-height: 100px;
-        max-width: 100px;
+      .total {
+        position: relative;
+        box-sizing: border-box;
+        @apply(--layout-vertical);
+        @apply(--montserrat-reg);
+        z-index: 0;
       }
+
+      .label {
+        font-size: 12px;
+        z-index: -1;
+        box-sizing: border-box;
+        padding: 5px 5px 0px 0px;
+        color:var(--ac-grey4);
+        text-align: var(--txt-align);
+
+      }
+
+      input {
+        @apply(--montserrat-reg);
+        color:var(--ac-darkgrey);
+        outline-width: 0;
+        outline: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        border: none;
+        z-index: 0;
+        box-sizing: border-box;
+        padding: 4px 8px 4px 0px;
+        font-size: 16px;
+        background-color: transparent;
+        border-bottom: 1px solid rgba(0,0,0,0.3);
+        text-align: var(--txt-align);
+      
+        -webkit-user-select: text;
+        -khtml-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
+        border-radius: 0px;
+
+      }
+
+      .nocontent label {
+        color: rgba(0,0,0,0.4);
+        -webkit-transition: -webkit-transform 0.25s;
+        transition: transform 0.25s;
+        -webkit-transform-origin: var(--transform-origin);
+        transform-origin: var(--transform-origin);
+        -webkit-transform: translateY(0%) translateX(10px) translateY(20px) scale(1.35);
+        transform: translateY(0%) translateX(10px) translateY(20px) scale(1.35);
+
+      }
+
+      .infocus label {
+        color: var(--input-color);
+        @apply(--montserrat-reg);
+        -webkit-transition: -webkit-transform 0.25s;
+        transition: transform 0.25s;
+        -webkit-transform-origin: var(--transform-origin);
+        transform-origin: var(--transform-origin);
+        -webkit-transform: translateY(0%) translateX(0px) scale(1);
+        transform: translateY(0%) translateX(0px) scale(1);
+      }
+
+      .infocus input {
+        border-bottom: 2px solid var(--ac-darkgrey);
+
+      }
+
+      .outfocus .nocontent label {
+        -webkit-transition: -webkit-transform 0.25s;
+        transition: transform 0.25s;
+        -webkit-transform-origin: var(--transform-origin);
+        transform-origin: var(--transform-origin);
+        -webkit-transform: translateY(0%) translateX(0px) scale(1);
+        transform: translateY(0%) translateX(0px) scale(1);
+      }
+
+
+
     </style>
 
-    <h1>&lt;ac-input&gt;</h1>
-    <content></content>
-    <p class="author">
-      <img src$="{{author.image}}">
-      Cheers,<br/>
-      <span class="name">{{author.name}}</span>
-    </p>
-  </template>
+    <div class$="{{focusclass}} {{contentclass}} total">
+      <label class="label">[[label]]</label>
+      <content select="[prefix]"></content>
+      <input id="inputter"
+        is="iron-input"
+        bind-value="{{inputvalue}}"
+        autofocus="[[autofocus]]"
+        type="{{type}}"
+        name$="[[name]]"
+        >
+    </div>
 
+
+  </template>
   <script>
     Polymer({
       is: 'ac-input',
+      behaviors: [
+      ],
 
       properties: {
-        /**
-         * `fancy` indicates that the element should don a monocle and tophat,
-         * while checking its pocket watch.
-         */
-        fancy: Boolean,
 
-        /**
-         * Describes the author of the element, but is really just an excuse to
-         * show off JSDoc annotations.
-         *
-         * @type {{name: string, image: string}}
-         */
-        author: {
-          type: Object,
-          // Use `value` to provide a default value for a property, by setting it
-          // on your element's prototype.
-          //
-          // If you provide a function, as we do here, Polymer will call that
-          // _per element instance_.
-          //
-          // We do that to ensure that each element gets its own copy of the
-          // value, rather than having it shared across all instances (via the
-          // prototype).
-          value: function() {
-            return {
-              name:  'Dimitri Glazkov',
-              image: 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg',
-            };
-          }
+        color: {
+          type:String,
+          value: 'darkgrey',
+          observer: '_color'
         },
+
+        inputvalue: {
+          type: String,
+          observer: '_inputvalue'
+        },
+
+        autofocus: {
+          type: Boolean,
+          value: false
+        },
+
+        date: {
+          type: Boolean,
+          value: false,
+          observer: '_date'
+        },
+
+        txt: {
+          type: Boolean,
+          value: false
+        },
+
+        center: {
+          type: Boolean,
+          value: false,
+          observer:'_center'
+        },
+
+        type: {
+          type: String,
+          value: 'text',
+          observer: '_type'
+        },
+
+
+        unixts: {
+          type: Number,
+          notify:true
+        },
+
       },
 
-      // Element Lifecycle
+      _inputvalue: function (){
+        if(this.inputvalue){
+          this.contentclass = 'withcontent';
+        } else {
+          this.contentclass = 'nocontent';
+        }
+
+      },
+
 
       ready: function() {
-        // `ready` is called after all elements have been configured, but
-        // propagates bottom-up. This element's children are ready, but parents
-        // are not.
-        //
-        // This is the point where you should make modifications to the DOM (when
-        // necessary), or kick off any processes the element wants to perform.
+        this.addEventListener('focus', this._boundtoFocus, true);
+        this.addEventListener('blur', this._boundtoBlur, true);
+        this._inputvalue();
       },
 
       attached: function() {
-        // `attached` fires once the element and its parents have been inserted
-        // into a document.
-        //
-        // This is a good place to perform any work related to your element's
-        // visual state or active behavior (measuring sizes, beginning animations,
-        // loading resources, etc).
+
+
+              // if(!this.txt && this.date){
+              //   console.log('ik heb een date');
+              // }
+
+          // this._pickaday();
+
+        // if(this.date){
+        //   this._pickaday();
+        // } else {
+        //   console.log("No pickaday");
+        // }
+
+
+
       },
+
+
+
 
       detached: function() {
-        // The analog to `attached`, `detached` fires when the element has been
-        // removed from a document.
-        //
-        // Use this to clean up anything you did in `attached`.
       },
 
-      // Element Behavior
-
-      /**
-       * Sometimes it's just nice to say hi.
-       *
-       * @param {string} greeting A positive greeting.
-       * @return {string} The full greeting.
-       */
-      sayHello: function(greeting) {
-        var response = greeting || 'Hello World!';
-        return 'ac-input says, ' + response;
+      _boundtoFocus: function(){
+          this.focusclass = 'infocus';
       },
 
-      /**
-       * The `ac-input-lasers` event is fired whenever `fireLasers` is called.
-       *
-       * @event ac-input-lasers
-       * @detail {{sound: String}}
-       */
+      _boundtoBlur: function(){
+          this.focusclass = 'outfocus';
+          this._inputvalue();
+      },
 
-      /**
-       * Attempt to destroy this element's enemies with a beam of light!
-       *
-       * Or, at least, dispatch an event in the vain hope that someone else will
-       * do the zapping.
-       */
-      fireLasers: function() {
-        this.fire('ac-input-lasers', {sound: 'Pew pew!'});
+      _color: function(){
+        this.inputcolor = 'var(--ac-'+this.color+')';
+        this.customStyle['--input-color'] = this.inputcolor;
+        this.updateStyles();
+      },
+
+      _type:function(){
+        // console.log(this.type);
+      },
+
+      _center: function(){
+        if(this.center){
+        this.customStyle['--txt-align'] = 'center';
+        this.customStyle['--transform-origin'] = 'center top';
+        } else {
+        this.customStyle['--txt-align'] = 'left';
+        this.customStyle['--transform-origin'] = 'left top';
+
+        }
+        this.updateStyles();
+
+      },
+
+
+      _date: function(){
+
+      
+      if(!this.txt && this.date){
+          var self = this;
+          var picker = new Pikaday(
+          {
+              field: this.$.inputter,
+              firstDay: 1,
+              minDate: new Date(2000, 0, 1),
+              maxDate: new Date(2020, 12, 31),
+              yearRange: [2000,2020],
+              onSelect: function() {
+                  self.inputvalue = this.getMoment().format('Do MMMM YYYY') + ' ';
+                  // var date = document.createTextNode(this.getMoment().format('Do MMMM YYYY') + ' ');
+                  // self.$.selected.appendChild(date);
+                  self.unixts = this.getMoment().format('X');
+              }
+          });          
+          // picker.setMoment(moment().dayOfYear(366));
+        }
       }
+
+
+
     });
   </script>
 </dom-module>

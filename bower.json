@@ -18,7 +18,10 @@
     "/test/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.2.0"
+    "polymer": "Polymer/polymer#^1.2.0",
+    "ac-style": "https://github.com/ArcadeCity/ac-style.git",
+    "iron-input": "^1.0.10",
+    "pikaday": "https://github.com/dbushell/Pikaday.git#^1.4.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0"

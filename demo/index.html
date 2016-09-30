@@ -17,32 +17,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="../ac-input.html">
   </head>
   <body unresolved>
-
-    <p>An example of <code>&lt;ac-input&gt;</code>:</p>
-
-    <p>Make words! <button id="saybtn">Say Something</button></p>
-    <p>Make lasers! <button id="laserbtn">Fire lasers</button></p>
-
-    <ac-input author='{"name": "Lord Meowser", "image": "http://lorempixel.com/g/300/200/cats/"}' fancy>
-      <h2>Hello ac-input</h2>
+ <ac-input txt label="Naam" placeholder="Just another txtinput">
     </ac-input>
 
-    <script>
-      var seedElement = document.querySelector('ac-input');
+    <ac-input date label="Geboortedatum" placeholder="29 september 2012">
+    </ac-input>
 
-      document.querySelector('#saybtn').addEventListener('click', function() {
-        alert(seedElement.sayHello('Hallo!'));
-      });
+    <ac-input type="time" label="Geboortetijdstip">
+    </ac-input>
 
-      document.querySelector('#laserbtn').addEventListener('click', function() {
-        seedElement.fireLasers();
-      });
 
-      document.addEventListener("ac-input-lasers", function(e) {
-        console.log(e.detail.sound);
-      });
+    <ac-input txt label="Geboortetijdstip" prefix="Δ" center>
+    </ac-input>
 
-    </script>
 
   </body>
 </html>
